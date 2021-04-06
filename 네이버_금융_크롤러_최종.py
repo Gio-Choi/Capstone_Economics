@@ -14,6 +14,10 @@
 #     name: python3
 # ---
 
+# # 네이버 금융 재무제표 크롤러
+#
+# 종목코드를 리스트로 넣으면 재무제표를 데이터프레임으로 받아오고, 엑셀로 만들어준다.
+
 import requests
 import numpy as np
 import pandas as pd
@@ -694,12 +698,8 @@ for code in codes :
     finance_data = [item.get_text().strip() for item in finance_html.select('td')]
 
 
-# +
     finance_data = np.array(finance_data)
     finance_data.resize(len(finance_index), 4)
-
-
-# -
 
     finance_data
 
@@ -707,7 +707,6 @@ for code in codes :
     finance_date
 
 
-# +
      
 
     finance = pd.DataFrame(data=finance_data[0:,0:], index=finance_index, columns=finance_date)
