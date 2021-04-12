@@ -17,6 +17,7 @@
 # # 네이버 금융 재무제표 크롤러
 #
 # 종목코드를 리스트로 넣으면 재무제표를 데이터프레임으로 받아오고, 엑셀로 만들어준다.
+# BeutifulSoup를 사용했다. 
 
 import requests
 import numpy as np
@@ -113,49 +114,3 @@ for code in codes :
 # -
 
 # ## End
-
-    th_data = [item.get_text().strip() for item in finance_html.select('thead th')]
-     annual_date = th_data[3:7]
-#quarter_date = th_data[7:13]
-
-    annual_date
-
-# +
-    finance_index = [item.get_text().strip() for item in finance_html.select('th.h_th2')][3:4] 
-
-##여기다가 매출액말고 회사명을 넣으면 쫘악 정리가 될 듯 !!!
-
-# -
-
-    finance_index
-
-    finance_data = [item.get_text().strip() for item in finance_html.select('td')]
-
-
-    finance_data = np.array(finance_data)
-    finance_data.resize(len(finance_index), 4)
-
-    finance_data
-
-    finance_date = annual_date 
-    finance_date
-
-
-     
-
-    finance = pd.DataFrame(data=finance_data[0:,0:], index=finance_index, columns=finance_date)
-
-
-
-
-
-
-
-
-# +
-    finance.to_excel('test.xlsx')
-
-##   1) 따로 엑셀을 만든 후에 파일명에다가 회사명을 넣어도 좋을 듯 !! 2) 아니면 한번에 데이터프레임을 만들어서 합치는 것도 좋을 듯 !!  
-# -
-
-
