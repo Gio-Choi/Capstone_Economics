@@ -14,6 +14,11 @@
 #     name: python3
 # ---
 
+# ## 네이버금융_재무제표_크롤러
+#
+# '종목코드'를 입력하면 셀레늄으로 재무제표를 크롤링해오는 프로그램
+# 10개 기업만 테스트로 시도해 본 결과 정상 작동함. 
+
 import requests
 from bs4 import BeautifulSoup 
 from datetime import datetime                            
@@ -21,7 +26,7 @@ import pandas as pd
 import time 
 import urllib.request 
 from selenium.webdriver import Chrome
-import json
+import json 
 import re     
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -157,4 +162,7 @@ for i in company_list :
 df_all = df_first_row
 df_all.to_excel('tobinq.xlsx')
 
-
+# # 상의할 점
+#
+# 1. 기업들을 어떤 표준에 의거해서 산업 별로 분류할지? 
+# 2. 캡스톤 디자인 예산 신청해서 그 돈으로 선형회귀 관련 책을 구매하는 건 가능할지?
