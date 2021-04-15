@@ -36,25 +36,6 @@ codes = ['002840', '107590', '134380', '003650', '084990', '052260', '003610', '
  '082740', '042670', '034020', '024090', '003160', '092200', '090710', '013570', '026890', '115390']
 
 # +
-URL = "https://finance.naver.com/item/main.nhn?code=001040" 
-
-samsung_electronic = requests.get(URL)
-html = samsung_electronic.text
-soup = BeautifulSoup(html, 'html.parser')
-finance_html = soup.select('div.section.cop_analysis div.sub_section')[0]
-th_data = [item.get_text().strip() for item in finance_html.select('thead th')]
-annual_date = th_data[3:7]   
-finance_index = ['001040'] 
-finance_data = [item.get_text().strip() for item in finance_html.select('td')]
-finance_data = np.array(finance_data)
-finance_data.resize(len(finance_index), 4)
-finance_date = annual_date
-df1 = pd.DataFrame(data=finance_data[0:,0:], index=finance_index, columns=finance_date)
-# -
-
-df1
-
-# +
 #빈 데이터 프레임 하나 만들고 for문으로 하나씩 행추가하기 !!
 ## 위에꺼 따라 일단 첫번째 code는 for문에서 빼서 데이터프레임 하나 만든 후에(전역변수로), concat()함수로 하나씩 채워나가자 !
 for code in codes :
@@ -74,7 +55,7 @@ for code in codes :
         finance_data.resize(len(finance_index), 4)
         finance_date = annual_date
         df1 = pd.DataFrame(data=finance_data[0:,0:], index=finance_index, columns=finance_date)
-
+         
         URL = "https://finance.naver.com/item/main.nhn?code=" + code
     
         samsung_electronic = requests.get(URL)
@@ -111,7 +92,7 @@ for code in codes :
     
         df1 = pd.concat([df1,df2])
     
-        df1.to_excel('test.xlsx')
+        df1.to_excel('test_BeutifulSoup.xlsx')
         
 
 
