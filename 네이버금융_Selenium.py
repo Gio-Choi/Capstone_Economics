@@ -20,6 +20,11 @@
 #
 # 10개 기업만 테스트로 시도해 본 결과 정상 작동함. 
 
+# ## 조금 손본 후 '네이버금융_최종'으로 따로 저장함. 
+# ### 수정내역 
+# #### 1)1000개 이상의 기업을 크롤링하므로 창을 하나하나 닫는 코드 추가
+# #### 2) 상장폐지된 기업, 인수 합병된 기업 존재하기에 try, except로 예외처리함. 
+
 import requests
 from bs4 import BeautifulSoup 
 from datetime import datetime                            
@@ -35,12 +40,23 @@ import datetime as dt
 import time
 
 
+before_list = '''
+000040
+000080
+000100
+000000
+000120
+
+'''
+
+company_list = before_list.split()
+
+company_list
+
+
 # ## 기업의 '종목코드' 리스트화 해서 넣기
 #
 # 밑의 리스트는 예시
-
-company_list = ['002840', '107590', '134380', '003650', '084990', '052260', '003610', '001340', '014580', '035150',]
-
 
 # ## 현재 궁금증, 고민거리
 # 1)time,sleep은 몇 초 정도로 할지? 코스피, 코스닥 상장사 약 2000개 전부를 크롤링한다 생각했을 때 각 time.sleep에서 일초씩 차이가 나는 것은 총 소요시간에서 큰 차이로 이어짐. 
@@ -63,13 +79,13 @@ def stock_crawler(code):
     
     
     browser.get(base_url)
-    time.sleep(2)
+    time.sleep(1.5)
    
     browser.switch_to_frame(browser.find_element_by_id('coinfo_cp'))
-    time.sleep(2)
+    time.sleep(1.5)
     
     browser.find_elements_by_xpath('//*[@class="schtab"][1]/tbody/tr/td[3]')[0].click()
-    time.sleep(2)
+    time.sleep(1.5)
 
     html0 = browser.page_source
     html1 = BeautifulSoup(html0,'html.parser')
@@ -128,8 +144,12 @@ def stock_crawler(code):
     
     
     
+    
     ####
     df = pd.DataFrame(td2,columns = col,index = [multiple_index, date])
+    
+    browser.close()
+    
     
     ###일단 어떤게 필요할지 몰라 다 들고왔지만 5개년, 즉 5행까지만 쓰는 걸로 잠정적 결론.
     df.drop(df.index[5:], inplace=True)
@@ -138,7 +158,7 @@ def stock_crawler(code):
     
     return df
 
-df_first_row = stock_crawler('005930')
+df_first_row = stock_crawler('000020')
 
 df_first_row
 
@@ -146,18 +166,15 @@ df_first_row
 #
 
 for i in company_list :
-    df_new = stock_crawler(i)
-    df_first_row = pd.concat([df_first_row, df_new])
     
-    
-    
-    ##
-    if i == company_list[5] :
-        df_first_row.to_excel('tobinq.xlsx')
-        time.sleep(3)
+    try : 
+        df_new = stock_crawler(i)
+        df_first_row = pd.concat([df_first_row, df_new])
         
-    
-    ##
+    except:
+        
+        time.sleep(1)
+        continue
 
 
 #엑셀로 변환
