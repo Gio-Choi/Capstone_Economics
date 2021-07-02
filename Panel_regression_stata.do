@@ -67,4 +67,51 @@ xtreg  y3 x11 x12 x13 lnAsset roa der, fe i(firm)
 운수창고
 estimate table Model // 이거를 copy table 한글이나 워드로 들고가서 표로 만들면 됨..!!!)
 
-drop if 산업분류 == "금융" || 산업분류 =="철강금속" || 산업분류 =="유통업" ||산업분류 == "섬유의복" ||산업분류 =="음식료품"||산업분류 =="의약품"||산업분류 == "서비스업"||산업분류 == "에너지"||산업분류 =="기타제조업"||산업분류 =="운수창고"     
+drop if year == 2017 | year == 2018 | year == 2019 | year == 2020
+
+su y1
+su y2
+su x11
+su x12
+su x13
+su x14
+su lnAsset
+su lnRevenue
+su roa
+su der
+
+tab x11
+tab x12
+tab x13
+tab x14
+  
+ drop x11 x12 x13 x14
+
+gen x11=6 if 환경등급=="A+"
+replace x11=5 if 환경등급=="A"
+replace x11=4 if 환경등급=="B+"
+replace x11=3 if 환경등급=="B"
+replace x11=2 if 환경등급=="C"
+replace x11=1 if 환경등급=="D"
+
+gen x12=6 if 사회등급=="A+"
+replace x12=5 if 사회등급=="A"
+replace x12=4 if 사회등급=="B+"
+replace x12=3 if 사회등급=="B"
+replace x12=2 if 사회등급=="C"
+replace x12=1 if 사회등급=="D"
+
+gen x13=6 if 지배구조등급=="A+"
+replace x13=5 if 지배구조등급=="A"
+replace x13=4 if 지배구조등급=="B+"
+replace x13=3 if 지배구조등급=="B"
+replace x13=2 if 지배구조등급=="C"
+replace x13=1 if 지배구조등급=="D"
+
+gen x14=6 if 통합등급=="A+"
+replace x14=5 if 통합등급=="A"
+replace x14=4 if 통합등급=="B+"
+replace x14=3 if 통합등급=="B"
+replace x14=2 if 통합등급=="C"
+replace x14=1 if 통합등급=="D"
+  
